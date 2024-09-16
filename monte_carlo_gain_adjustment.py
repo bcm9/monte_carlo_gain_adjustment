@@ -97,17 +97,31 @@ num_simulations = 1000  # Number of simulations
 # Run the Monte Carlo simulation with skewed preferred gains
 # simulated_gain_adjustments: A 2D array where each row represents the gain adjustments for one simulation (i.e., one user) across multiple sessions.
 # preferred_gains: A 1D array of preferred gain values for each simulation (user), drawn from a log-normal distribution.
-simulated_gain_adjustments, preferred_gains = monte_carlo_simulation_skewed_preferred_gain(num_simulations, initial_gain, preferred_gain_mean, preferred_gain_std, num_adjustments, mean_adjustment, std_dev_adjustment)
+cumulative_gain_adjustments, preferred_gains = monte_carlo_simulation_skewed_preferred_gain(num_simulations, initial_gain, preferred_gain_mean, preferred_gain_std, num_adjustments, mean_adjustment, std_dev_adjustment)
 
-# Calculate the mean and percentiles of adjusted gains from the simulations
-adj_gain_mean = np.mean(simulated_gain_adjustments, axis=0)
-adj_gain_5 = np.percentile(simulated_gain_adjustments, 5, axis=0)
-adj_gain_95 = np.percentile(simulated_gain_adjustments, 95, axis=0)
+########################################################################################################################################################################
+# Calculate adjustments, means, delta gains
+########################################################################################################################################################################
+# Calculate individual gain adjustments (session-by-session differences)
+gain_adjustments = np.diff(cumulative_gain_adjustments, axis=1)
+# Add back the initial gain to match the original number of sessions
+initial_gains = cumulative_gain_adjustments[:, 0].reshape(-1, 1)  # Extract the initial gains for each user
+gain_adjustments = np.hstack((initial_gains, gain_adjustments))  # Concatenate the initial gains with the session-by-session adjustments
+
+# Calculate the mean and percentiles for the individual gain adjustments
+adj_gain_mean = np.mean(gain_adjustments, axis=0)
+adj_gain_5 = np.percentile(gain_adjustments, 5, axis=0)
+adj_gain_95 = np.percentile(gain_adjustments, 95, axis=0)
+
+# Calculate the mean and percentiles of cumulative gains from the simulations
+cum_adj_gain_mean = np.mean(cumulative_gain_adjustments, axis=0)
+cum_adj_gain_5 = np.percentile(cumulative_gain_adjustments, 5, axis=0)
+cum_adj_gain_95 = np.percentile(cumulative_gain_adjustments, 95, axis=0)
 
 # Calculate the delta gain (change from preferred gain)
-delta_gain_mean = np.mean(simulated_gain_adjustments - preferred_gains[:, None], axis=0)
-delta_gain_5 = np.percentile(simulated_gain_adjustments - preferred_gains[:, None], 5, axis=0)
-delta_gain_95 = np.percentile(simulated_gain_adjustments - preferred_gains[:, None], 95, axis=0)
+delta_gain_mean = np.mean(cumulative_gain_adjustments - preferred_gains[:, None], axis=0)
+delta_gain_5 = np.percentile(cumulative_gain_adjustments - preferred_gains[:, None], 5, axis=0)
+delta_gain_95 = np.percentile(cumulative_gain_adjustments - preferred_gains[:, None], 95, axis=0)
 
 ########################################################################################################################################################################
 # Plot histogram of preferred gains
@@ -124,13 +138,12 @@ plt.grid(True, linestyle='--', alpha=0.3)
 
 # Save and show the histogram
 folder = 'C:/Users/bc22/OneDrive/Documents/code/gain_adjustment_monte-carlo/'
-plt.savefig(folder+'monte_carlo_preferred_gains.png', dpi=300, bbox_inches='tight')
+plt.savefig(folder+'mc_preferred_gains.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 ########################################################################################################################################################################
 # Plot results of simulation with delta gain
 ########################################################################################################################################################################
-# Plot the results with delta gain
 plt.figure(figsize=(10, 6))
 plt.plot(delta_gain_mean, label="Mean Δ Gain from Preference", color="#4169E1",lw=3)
 plt.fill_between(range(num_adjustments), delta_gain_5, delta_gain_95, color='lightblue', alpha=0.2, label="90% Confidence Interval")
@@ -143,5 +156,27 @@ plt.legend(loc='lower right', fontsize=12, frameon=False, framealpha=0.1)
 plt.grid(True, linestyle='--', alpha=0.3)
 
 # Save and show the figure
-plt.savefig(folder+'monte_carlo_delta_plot.png', dpi=300, bbox_inches='tight')
+plt.savefig(folder+'mc_convergence_plot.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+########################################################################################################################################################################
+# Plot individual gain adjustments
+########################################################################################################################################################################
+plt.figure(figsize=(10, 6))
+# Plot the mean individual gain adjustment
+plt.plot(adj_gain_mean, label="Mean Adjustment", color="#4169E1", lw=3)
+# Fill between the 5th and 95th percentiles for the confidence interval
+plt.fill_between(range(num_adjustments), adj_gain_5, adj_gain_95, color='lightblue', alpha=0.2, label="90% CI")
+# Update title and labels
+plt.title("Session-by-Session Gain Adjustments", fontsize=18, fontweight='bold')
+plt.xlabel("Number of Adjustments", fontsize=18, fontweight='bold')
+plt.ylabel("Gain Adjustment (dB)", fontsize=18, fontweight='bold')
+# Style the ticks and legend
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
+plt.legend(loc='lower left', fontsize=12, frameon=False, framealpha=0.1)
+plt.grid(True, linestyle='--', alpha=0.3)
+
+# Save and show the updated figure
+plt.savefig(folder+'mc_adjustments_plot.png', dpi=300, bbox_inches='tight')
 plt.show()
