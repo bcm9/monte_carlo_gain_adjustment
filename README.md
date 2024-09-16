@@ -6,7 +6,7 @@ Python script for simulating how users adjust hearing aid gain to reach their pr
 ## Features
 - **Simulated adjustments**: Models user self-adjustments of hearing aid gain over multiple sessions.
 - **Monte Carlo simulation**: Simulates multiple user trials with varied preferences, enabling an understanding of how different users adjust their gain.
-- **Adjustable parameters**: Customise the number of adjustments, the mean adjustment size, and variability in both user adjustments and preferred gain settings.
+- **Adjustable parameters**: The number of adjustments, the mean adjustment size, and variability in both user adjustments and preferred gain settings.
 - **Visualisation**: Plots the mean and confidence intervals for gain adjustments, as well as changes from preferred gain over time.
 
 <img src="./monte_carlo_preferred_gains_log_normal.png" alt="Simulation Plot" width="400"/>
