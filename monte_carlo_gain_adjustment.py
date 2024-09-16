@@ -2,11 +2,11 @@
 # Monte Carlo Simulation of Hearing Aid Gain Adjustments Towards Preferred Gain (Log-Normal Distribution)
 # 
 # Simulates how users self-adjust hearing aid gain towards their preferred gain. 
-# The experiment starts at an initial gain setting and models multiple adjustment sessions (e.g., over days or trials). 
+# The experiment starts at an initial gain setting and models multiple continous adjustments. 
 # Monte Carlo simulations introduce variability in user behaviour through varied preferred gain settings and adjustment steps. 
 # 
 # Preferred gains are modelled using a log-normal distribution (reflecting a skewed distribution towards milder hearing loss). 
-# Adjustments made during simulations are modelled using a normal distribution.
+# Adjustments made continously during simulations are modelled using a normal distribution.
 # The mean adjustment is halved after half of the trials.
 ########################################################################################################################################################################
 
