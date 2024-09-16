@@ -88,7 +88,7 @@ def monte_carlo_simulation_skewed_preferred_gain(num_simulations, initial_gain, 
 initial_gain = 0  # Initial gain setting (0 to 100 scale)
 preferred_gain_mean = 20  # Mean for skewed distribution (closer to 20 dB, reflecting mild hearing loss)
 preferred_gain_std = 0.4  # Standard deviation for skewed distribution (controls tail length)
-num_adjustments = 25  # Number of self-adjustments (e.g., over sessions)
+num_adjustments = 15  # Number of self-adjustments (e.g., over sessions)
 mean_adjustment = 4  # Mean gain adjustment per session
 std_dev_adjustment = 1  # Variability in adjustment
 num_simulations = 1000  # Number of Monte Carlo simulations
