@@ -39,7 +39,7 @@ def simulate_gain_adjustment(initial_gain, preferred_gain, num_adjustments, mean
         
         # Determines direction of adjustment
         direction = 1 if preferred_gain > gain_settings[i-1] else -1
-        # Updates gain setting with adjustment towards prefered gain
+        # Gain adjustment towards prefered gain
         gain_settings[i] = gain_settings[i-1] + direction * adjustment
         
         # Limit gain to a safe and practical range
@@ -70,8 +70,8 @@ def monte_carlo_simulation_skewed_preferred_gain(num_simulations, initial_gain, 
     # Generate skewed preferred gains using a log-normal distribution
     preferred_gains = np.random.lognormal(mean=np.log(preferred_gain_mean), sigma=preferred_gain_std, size=num_simulations)
     
-    # Clip the preferred gains to be within a practical range (e.g., 5 to 70 dB)
-    preferred_gains = np.clip(preferred_gains, 5, 70)
+    # Clip the preferred gains to be within a practical range
+    preferred_gains = np.clip(preferred_gains, 5, 50)
     
     # Array to store all simulation results
     all_simulations = np.zeros((num_simulations, num_adjustments))
@@ -87,13 +87,15 @@ def monte_carlo_simulation_skewed_preferred_gain(num_simulations, initial_gain, 
 ########################################################################################################################################################################
 initial_gain = 0  # Initial gain setting (0 to 100 scale)
 preferred_gain_mean = 20  # Mean for skewed distribution (closer to 20 dB, reflecting mild hearing loss)
-preferred_gain_std = 0.4  # Standard deviation for skewed distribution (controls tail length)
+preferred_gain_std = 0.3  # Standard deviation for skewed distribution (controls tail length)
 num_adjustments = 15  # Number of self-adjustments (e.g., over sessions)
 mean_adjustment = 4  # Mean gain adjustment per session
 std_dev_adjustment = 1  # Variability in adjustment
 num_simulations = 1000  # Number of simulations
 
 # Run the Monte Carlo simulation with skewed preferred gains
+# simulated_gain_adjustments: A 2D array where each row represents the gain adjustments for one simulation (i.e., one user) across multiple sessions.
+# preferred_gains: A 1D array of preferred gain values for each simulation (user), drawn from a log-normal distribution.
 simulated_gain_adjustments, preferred_gains = monte_carlo_simulation_skewed_preferred_gain(num_simulations, initial_gain, preferred_gain_mean, preferred_gain_std, num_adjustments, mean_adjustment, std_dev_adjustment)
 
 # Calculate the mean and percentiles of adjusted gains from the simulations
@@ -111,7 +113,7 @@ delta_gain_95 = np.percentile(simulated_gain_adjustments - preferred_gains[:, No
 ########################################################################################################################################################################
 plt.rcParams['font.family'] = 'Calibri'
 plt.figure(figsize=(8, 6))
-plt.hist(preferred_gains, bins=30, color='skyblue', edgecolor='black', alpha=0.7)
+plt.hist(preferred_gains, bins=30, color='#FFC0CB', edgecolor='black', alpha=0.5)
 plt.title("Histogram of Preferred Gains", fontsize=17, fontweight='bold')
 plt.xlabel("Preferred Gain (dB)", fontsize=16, fontweight='bold')
 plt.ylabel("Frequency", fontsize=16, fontweight='bold')
@@ -129,8 +131,8 @@ plt.show()
 ########################################################################################################################################################################
 # Plot the results with delta gain (change from preferred gain)
 plt.figure(figsize=(10, 6))
-plt.plot(delta_gain_mean, label="Mean Δ Gain from Preference", color="blue",lw=3)
-plt.fill_between(range(num_adjustments), delta_gain_5, delta_gain_95, color='lavender', alpha=0.5, label="90% Confidence Interval")
+plt.plot(delta_gain_mean, label="Mean Δ Gain from Preference", color="#DE3163",lw=3)
+plt.fill_between(range(num_adjustments), delta_gain_5, delta_gain_95, color='#F3CFC6', alpha=0.2, label="90% Confidence Interval")
 plt.title("Monte Carlo Simulation of Adjustments to Preferred Gain", fontsize=18, fontweight='bold')
 plt.xlabel("Number of Adjustments", fontsize=18, fontweight='bold')
 plt.ylabel("Δ Gain (dB)", fontsize=18, fontweight='bold')
