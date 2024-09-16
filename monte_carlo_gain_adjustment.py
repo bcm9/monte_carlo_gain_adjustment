@@ -1,6 +1,6 @@
 ########################################################################################################################################################################
 # Monte Carlo Simulation of Hearing Aid Gain Adjustments
-# Simulates how users self-adjust their hearing aid gain over time to match their preferred gain. 
+# Simulates how users self-adjust their hearing aid gain towards their preferred gain. 
 # The experiment starts at an initial gain setting and models multiple adjustment sessions (e.g., over days or trials). 
 # Monte Carlo simulations introduce variability in user behaviour through varied preferred gain settings and 
 # adjustment steps. This allows us to assess how users converge to their preferred gain and the variability in the process.
