@@ -11,4 +11,4 @@ Python script for simulating how users adjust hearing aid gain to reach their pr
 
 <img src="./monte_carlo_preferred_gains_log_normal.png" alt="Simulation Plot" width="400"/>
 
-<img src="./monte_carlo_gain_adjustment_plot.png" alt="Simulation Plot" width="400"/>
+<img src="./monte_carlo_gain_adjustment_plot.png" alt="Simulation Plot" width="600"/>
