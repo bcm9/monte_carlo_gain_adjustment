@@ -114,7 +114,7 @@ delta_gain_95 = np.percentile(simulated_gain_adjustments - preferred_gains[:, No
 ########################################################################################################################################################################
 plt.rcParams['font.family'] = 'Calibri'
 plt.figure(figsize=(8, 6))
-plt.hist(preferred_gains, bins=30, color='lightblue', edgecolor='black', alpha=0.5)
+plt.hist(preferred_gains, bins=30, color='lightblue', edgecolor='black', alpha=0.7)
 plt.title("Histogram of Preferred Gains", fontsize=17, fontweight='bold')
 plt.xlabel("Preferred Gain (dB)", fontsize=16, fontweight='bold')
 plt.ylabel("Frequency", fontsize=16, fontweight='bold')
