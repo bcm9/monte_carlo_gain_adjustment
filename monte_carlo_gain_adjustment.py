@@ -124,17 +124,17 @@ plt.grid(True, linestyle='--', alpha=0.3)
 
 # Save and show the histogram
 folder = 'C:/Users/bc22/OneDrive/Documents/code/gain_adjustment_monte-carlo/'
-plt.savefig(folder+'monte_carlo_preferred_gains_log_normal.png', dpi=300, bbox_inches='tight')
+plt.savefig(folder+'monte_carlo_preferred_gains.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 ########################################################################################################################################################################
-# Plot results of simulation
+# Plot results of simulation with delta gain
 ########################################################################################################################################################################
 # Plot the results with delta gain
 plt.figure(figsize=(10, 6))
 plt.plot(delta_gain_mean, label="Mean Δ Gain from Preference", color="#4169E1",lw=3)
 plt.fill_between(range(num_adjustments), delta_gain_5, delta_gain_95, color='lightblue', alpha=0.2, label="90% Confidence Interval")
-plt.title("Adjustments from 0 dB to Preferred Gain", fontsize=18, fontweight='bold')
+plt.title("Convergence to Preferred Gain", fontsize=18, fontweight='bold')
 plt.xlabel("Number of Adjustments", fontsize=18, fontweight='bold')
 plt.ylabel("Δ Gain (dB)", fontsize=18, fontweight='bold')
 plt.xticks(fontsize=16)
@@ -143,5 +143,5 @@ plt.legend(loc='lower right', fontsize=12, frameon=False, framealpha=0.1)
 plt.grid(True, linestyle='--', alpha=0.3)
 
 # Save and show the figure
-plt.savefig(folder+'monte_carlo_gain_adjustment_plot_log_normal.png', dpi=300, bbox_inches='tight')
+plt.savefig(folder+'monte_carlo_delta_plot.png', dpi=300, bbox_inches='tight')
 plt.show()
