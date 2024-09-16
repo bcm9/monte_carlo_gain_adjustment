@@ -1,5 +1,5 @@
 ########################################################################################################################################################################
-# Monte Carlo Simulation of Hearing Aid Gain Adjustments
+# Monte Carlo Simulation of Hearing Aid Gain Adjustments with Skewed Preferred Gain (Log-Normal Distribution)
 # Simulates how users self-adjust their hearing aid gain towards their preferred gain. 
 # The experiment starts at an initial gain setting and models multiple adjustment sessions (e.g., over days or trials). 
 # Monte Carlo simulations introduce variability in user behaviour through varied preferred gain settings and 
@@ -41,22 +41,22 @@ def simulate_gain_adjustment(initial_gain, preferred_gain, num_adjustments, mean
         gain_settings[i] = gain_settings[i-1] + direction * adjustment
         
         # Limit gain to a safe and practical range
-        gain_settings[i] = np.clip(gain_settings[i], 0, 70)
+        gain_settings[i] = np.clip(gain_settings[i], 0, 80)
     
     return gain_settings
 
 ########################################################################################################################################################################
-# Monte Carlo simulation for gain adjustments with varied preferred gain
+# Monte Carlo simulation for gain adjustments with skewed preferred gain (log-normal distribution)
 ########################################################################################################################################################################
-def monte_carlo_simulation_varied_preferred_gain(num_simulations, initial_gain, preferred_gain_mean, preferred_gain_std, num_adjustments, mean_adjustment, std_dev_adjustment):
+def monte_carlo_simulation_skewed_preferred_gain(num_simulations, initial_gain, preferred_gain_mean, preferred_gain_std, num_adjustments, mean_adjustment, std_dev_adjustment):
     """
-    Perform Monte Carlo simulation for user gain adjustments with varied preferred gain settings.
+    Perform Monte Carlo simulation for user gain adjustments with skewed preferred gain settings (log-normal distribution).
     
     Parameters:
     num_simulations (int): Number of simulations to run
     initial_gain (float): Initial gain setting
-    preferred_gain_mean (float): Mean preferred gain setting
-    preferred_gain_std (float): Standard deviation of preferred gain
+    preferred_gain_mean (float): Mean preferred gain setting (for the log-normal distribution)
+    preferred_gain_std (float): Standard deviation of preferred gain (for the log-normal distribution)
     num_adjustments (int): Number of adjustments
     mean_adjustment (float): Mean adjustment per session
     std_dev_adjustment (float): Standard deviation of adjustment
@@ -65,11 +65,14 @@ def monte_carlo_simulation_varied_preferred_gain(num_simulations, initial_gain, 
     np.array: A 2D array where each row is a simulation result over the adjustments
     np.array: A 1D array of the preferred gains for each simulation
     """
+    # Generate skewed preferred gains using a log-normal distribution
+    preferred_gains = np.random.lognormal(mean=np.log(preferred_gain_mean), sigma=preferred_gain_std, size=num_simulations)
+    
+    # Clip the preferred gains to be within a practical range (e.g., 5 to 70 dB)
+    preferred_gains = np.clip(preferred_gains, 5, 70)
+    
     # Array to store all simulation results
     all_simulations = np.zeros((num_simulations, num_adjustments))
-    
-    # Generate varied preferred gains for each simulation
-    preferred_gains = np.random.normal(preferred_gain_mean, preferred_gain_std, num_simulations)
     
     for i in range(num_simulations):
         # Run the gain adjustment simulation for each trial with a unique preferred gain
@@ -81,31 +84,47 @@ def monte_carlo_simulation_varied_preferred_gain(num_simulations, initial_gain, 
 # Set simulation parameters
 ########################################################################################################################################################################
 initial_gain = 0  # Initial gain setting (0 to 100 scale)
-preferred_gain_mean = 30  # Mean preferred gain setting
-preferred_gain_std = 10  # Standard deviation for preferred gain to introduce variability
+preferred_gain_mean = 20  # Mean for skewed distribution (closer to 20 dB, reflecting mild hearing loss)
+preferred_gain_std = 0.4  # Standard deviation for skewed distribution (controls tail length)
 num_adjustments = 25  # Number of self-adjustments (e.g., over sessions)
 mean_adjustment = 4  # Mean gain adjustment per session
 std_dev_adjustment = 1  # Variability in adjustment
 num_simulations = 1000  # Number of Monte Carlo simulations
 
-# Run the Monte Carlo simulation with varied preferred gains
-simulated_gain_adjustments, preferred_gains = monte_carlo_simulation_varied_preferred_gain(num_simulations, initial_gain, preferred_gain_mean, preferred_gain_std, num_adjustments, mean_adjustment, std_dev_adjustment)
+# Run the Monte Carlo simulation with skewed preferred gains
+simulated_gain_adjustments, preferred_gains = monte_carlo_simulation_skewed_preferred_gain(num_simulations, initial_gain, preferred_gain_mean, preferred_gain_std, num_adjustments, mean_adjustment, std_dev_adjustment)
 
 # Calculate the mean and percentiles from the simulations
 mean_simulation = np.mean(simulated_gain_adjustments, axis=0)
 percentile_5 = np.percentile(simulated_gain_adjustments, 5, axis=0)
 percentile_95 = np.percentile(simulated_gain_adjustments, 95, axis=0)
 
-# Calculate the delta gain (change from preferred gain), using varied preferred gains
+# Calculate the delta gain (change from preferred gain), using skewed preferred gains
 delta_gain_mean = np.mean(simulated_gain_adjustments - preferred_gains[:, None], axis=0)
 delta_gain_5 = np.percentile(simulated_gain_adjustments - preferred_gains[:, None], 5, axis=0)
 delta_gain_95 = np.percentile(simulated_gain_adjustments - preferred_gains[:, None], 95, axis=0)
 
 ########################################################################################################################################################################
-# Plot results
+# Plot histogram of preferred gains
 ########################################################################################################################################################################
 plt.rcParams['font.family'] = 'Calibri'
+plt.figure(figsize=(8, 6))
+plt.hist(preferred_gains, bins=30, color='skyblue', edgecolor='black', alpha=0.7)
+plt.title("Histogram of Preferred Gains", fontsize=17, fontweight='bold')
+plt.xlabel("Preferred Gain (dB)", fontsize=16, fontweight='bold')
+plt.ylabel("Frequency", fontsize=16, fontweight='bold')
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
+plt.grid(True, linestyle='--', alpha=0.3)
 
+# Save and show the histogram
+folder = 'C:/Users/bc22/OneDrive/Documents/code/gain_adjustment_monte-carlo/'
+plt.savefig(folder+'monte_carlo_preferred_gains_log_normal.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+########################################################################################################################################################################
+# Plot results of simulation
+########################################################################################################################################################################
 # Plot the results with delta gain (change from preferred gain)
 plt.figure(figsize=(10, 6))
 plt.plot(delta_gain_mean, label="Mean Δ Gain from Preference", color="blue",lw=3)
@@ -119,6 +138,5 @@ plt.legend(loc='lower right', fontsize=12, frameon=False, framealpha=0.1)
 plt.grid(True, linestyle='--', alpha=0.3)
 
 # Save and show the figure
-folder = 'C:/Users/bc22/OneDrive/Documents/code/gain_adjustment_monte-carlo/'
-plt.savefig(folder+'monte_carlo_gain_adjustment_plot.png', dpi=300, bbox_inches='tight')
+plt.savefig(folder+'monte_carlo_gain_adjustment_plot_log_normal.png', dpi=300, bbox_inches='tight')
 plt.show()
