@@ -10,4 +10,5 @@ Python script for simulating how users adjust hearing aid gain to reach their pr
 <div style="display: flex; justify-content: space-between;">
   <img src="./mc_preferred_gains.png" alt="Simulation Plot" width="350"/>
   <img src="./mc_convergence.png" alt="Simulation Plot" width="420"/>
+  <img src="./mc_adjustments.png" alt="Simulation Plot" width="420"/>
 </div>
