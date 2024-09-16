@@ -2,8 +2,10 @@
 # Monte Carlo Simulation of Hearing Aid Gain Adjustments with Skewed Preferred Gain (Log-Normal Distribution)
 # Simulates how users self-adjust their hearing aid gain towards their preferred gain. 
 # The experiment starts at an initial gain setting and models multiple adjustment sessions (e.g., over days or trials). 
-# Monte Carlo simulations introduce variability in user behaviour through varied preferred gain settings and 
-# adjustment steps. This allows us to assess how users converge to their preferred gain and the variability in the process.
+# Monte Carlo simulations introduce variability in user behaviour through varied preferred gain settings and adjustment steps. 
+# Preferred gains are modelled using a log-normal distribution (reflecting a skewed distribution towards milder hearing loss), 
+# while adjustments made during simulations are modelled using a normal distribution.
+# This allows us to assess how users converge to their preferred gain and the variability in the process.
 ########################################################################################################################################################################
 
 import numpy as np
@@ -94,12 +96,12 @@ num_simulations = 1000  # Number of Monte Carlo simulations
 # Run the Monte Carlo simulation with skewed preferred gains
 simulated_gain_adjustments, preferred_gains = monte_carlo_simulation_skewed_preferred_gain(num_simulations, initial_gain, preferred_gain_mean, preferred_gain_std, num_adjustments, mean_adjustment, std_dev_adjustment)
 
-# Calculate the mean and percentiles from the simulations
-mean_simulation = np.mean(simulated_gain_adjustments, axis=0)
-percentile_5 = np.percentile(simulated_gain_adjustments, 5, axis=0)
-percentile_95 = np.percentile(simulated_gain_adjustments, 95, axis=0)
+# Calculate the mean and percentiles of adjusted gains from the simulations
+adj_gain_mean = np.mean(simulated_gain_adjustments, axis=0)
+adj_gain_5 = np.percentile(simulated_gain_adjustments, 5, axis=0)
+adj_gain_95 = np.percentile(simulated_gain_adjustments, 95, axis=0)
 
-# Calculate the delta gain (change from preferred gain), using skewed preferred gains
+# Calculate the delta gain (change from preferred gain)
 delta_gain_mean = np.mean(simulated_gain_adjustments - preferred_gains[:, None], axis=0)
 delta_gain_5 = np.percentile(simulated_gain_adjustments - preferred_gains[:, None], 5, axis=0)
 delta_gain_95 = np.percentile(simulated_gain_adjustments - preferred_gains[:, None], 95, axis=0)
