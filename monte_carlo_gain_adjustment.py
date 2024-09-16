@@ -3,8 +3,9 @@
 # Simulates how users self-adjust their hearing aid gain towards their preferred gain. 
 # The experiment starts at an initial gain setting and models multiple adjustment sessions (e.g., over days or trials). 
 # Monte Carlo simulations introduce variability in user behaviour through varied preferred gain settings and adjustment steps. 
-# Preferred gains are modelled using a log-normal distribution (reflecting a skewed distribution towards milder hearing loss), 
-# while adjustments made during simulations are modelled using a normal distribution.
+# Preferred gains are modelled using a log-normal distribution (reflecting a skewed distribution towards milder hearing loss). 
+# Adjustments made during simulations are modelled using a normal distribution.
+# The mean adjustment is halved after half of the trials.
 # This allows us to assess how users converge to their preferred gain and the variability in the process.
 ########################################################################################################################################################################
 
@@ -33,6 +34,12 @@ def simulate_gain_adjustment(initial_gain, preferred_gain, num_adjustments, mean
     gain_values[0] = initial_gain
     
     for i in range(1, num_adjustments):
+        # Reduce the mean adjustment after a certain number of adjustments (e.g., after 6 adjustments)
+        if i > round(num_adjustments/2):
+            mean_adjustment = mean_adjustment * 0.5  # Reduce the adjustment size by half
+        else:
+            mean_adjustment = mean_adjustment
+
         # Simulation of adjustments to gain
         # Generate a random adjustment based on normal distribution
         adjustment = np.random.normal(mean_adjustment, std_dev_adjustment)
@@ -89,7 +96,7 @@ initial_gain = 0  # Initial gain setting
 preferred_gain_mean = 20  # Mean for skewed distribution (closer to 20 dB, reflecting mild hearing loss)
 preferred_gain_std = 0.3  # Standard deviation for skewed distribution (controls tail length)
 
-num_adjustments = 12  # Number of self-adjustments (e.g., over trials/sessions)
+num_adjustments = 14  # Number of self-adjustments (e.g., over trials/sessions)
 mean_adjustment = 4  # Mean gain adjustment per session
 std_dev_adjustment = 1  # Variability in adjustment
 num_simulations = 1000  # Number of simulations
