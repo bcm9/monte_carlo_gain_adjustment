@@ -114,7 +114,7 @@ delta_gain_95 = np.percentile(simulated_gain_adjustments - preferred_gains[:, No
 ########################################################################################################################################################################
 plt.rcParams['font.family'] = 'Calibri'
 plt.figure(figsize=(8, 6))
-plt.hist(preferred_gains, bins=30, color='#4169E1', edgecolor='black', alpha=0.5)
+plt.hist(preferred_gains, bins=30, color='lightblue', edgecolor='black', alpha=0.5)
 plt.title("Histogram of Preferred Gains", fontsize=17, fontweight='bold')
 plt.xlabel("Preferred Gain (dB)", fontsize=16, fontweight='bold')
 plt.ylabel("Frequency", fontsize=16, fontweight='bold')
@@ -133,7 +133,7 @@ plt.show()
 # Plot the results with delta gain
 plt.figure(figsize=(10, 6))
 plt.plot(delta_gain_mean, label="Mean Δ Gain from Preference", color="#4169E1",lw=3)
-plt.fill_between(range(num_adjustments), delta_gain_5, delta_gain_95, color='#87CEFA', alpha=0.2, label="90% Confidence Interval")
+plt.fill_between(range(num_adjustments), delta_gain_5, delta_gain_95, color='lightblue', alpha=0.2, label="90% Confidence Interval")
 plt.title("Monte Carlo Simulation of Adjustments to Preferred Gain", fontsize=18, fontweight='bold')
 plt.xlabel("Number of Adjustments", fontsize=18, fontweight='bold')
 plt.ylabel("Δ Gain (dB)", fontsize=18, fontweight='bold')
