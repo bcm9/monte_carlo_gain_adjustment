@@ -88,6 +88,7 @@ def monte_carlo_simulation_skewed_preferred_gain(num_simulations, initial_gain, 
 initial_gain = 0  # Initial gain setting (0 to 100 scale)
 preferred_gain_mean = 20  # Mean for skewed distribution (closer to 20 dB, reflecting mild hearing loss)
 preferred_gain_std = 0.3  # Standard deviation for skewed distribution (controls tail length)
+
 num_adjustments = 15  # Number of self-adjustments (e.g., over sessions)
 mean_adjustment = 4  # Mean gain adjustment per session
 std_dev_adjustment = 1  # Variability in adjustment
@@ -129,7 +130,7 @@ plt.show()
 ########################################################################################################################################################################
 # Plot results of simulation
 ########################################################################################################################################################################
-# Plot the results with delta gain (change from preferred gain)
+# Plot the results with delta gain
 plt.figure(figsize=(10, 6))
 plt.plot(delta_gain_mean, label="Mean Δ Gain from Preference", color="#4169E1",lw=3)
 plt.fill_between(range(num_adjustments), delta_gain_5, delta_gain_95, color='#87CEFA', alpha=0.2, label="90% Confidence Interval")
