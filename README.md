@@ -8,6 +8,6 @@ Python script for simulating how users adjust hearing aid gain to reach their pr
 - **Visualisation**: Plots the mean and confidence intervals for gain adjustments.
 
 <div style="display: flex; justify-content: space-between;">
-  <img src="./monte_carlo_preferred_gains.png" alt="Simulation Plot" width="350"/>
-  <img src="./monte_carlo_delta_plot.png" alt="Simulation Plot" width="400"/>
+  <img src="./mc_preferred_gains.png" alt="Simulation Plot" width="350"/>
+  <img src="./mc_convergence.png" alt="Simulation Plot" width="400"/>
 </div>
