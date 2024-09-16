@@ -1,7 +1,8 @@
 # Hearing aid gain adjustment  Monte Carlo simulation
 
 ## Overview
-Python script for simulating how users adjust hearing aid gain to reach their preferred gain settings. The simulation models the adjustments users make over time, starting from an initial reference gain. Monte Carlo simulations introduce variability in user preferences and adjustment patterns to study the overall distribution and trends in user gain adjustments.
+Python script for simulating how users adjust hearing aid gain to reach their preferred gain settings. The simulation models the adjustments users make over time, starting from an initial reference gain. Monte Carlo simulations introduce variability in user preferences and adjustment patterns to study the overall distribution and trends in user gain adjustments. User preferences for gain are modelled using a log-normal distribution to reflect the skewed nature of real-world preferences. Most users tend to prefer lower gains (e.g., around 20 dB, corresponding to mild hearing loss), with a few users requiring higher gains.
+
 
 ![Simulation Plot](./monte_carlo_gain_adjustment_plot.png)
 
