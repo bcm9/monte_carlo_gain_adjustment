@@ -9,5 +9,6 @@ Python script for simulating how users adjust hearing aid gain to reach their pr
 
 <div style="display: flex; justify-content: space-between;">
   <img src="./mc_preferred_gains.png" alt="Histogram of Preferred Gains in Monte Carlo Simulation" width="350"/>
-  <img src="./mc_convergence.png" alt="Plot of Convergence to Preferred Gain Over Sessions" width="420"/>
+  <img src="./mc_convergence.png" alt="Plot of Convergence to Preferred Gain Over Trials" width="420"/>
+  <img src="./mc_adjustments.png" alt="Plot of Gain Adjustments Across Trials" width="420"/>
 </div>
