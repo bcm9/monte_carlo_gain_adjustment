@@ -29,8 +29,8 @@ def simulate_gain_adjustment(initial_gain, preferred_gain, num_adjustments, mean
     np.array: Simulated gain adjustments over the sessions
     """
     # Array to store gain settings over time
-    gain_settings = np.zeros(num_adjustments)
-    gain_settings[0] = initial_gain
+    gain_values = np.zeros(num_adjustments)
+    gain_values[0] = initial_gain
     
     for i in range(1, num_adjustments):
         # Simulation of adjustments to gain
@@ -38,19 +38,19 @@ def simulate_gain_adjustment(initial_gain, preferred_gain, num_adjustments, mean
         adjustment = np.random.normal(mean_adjustment, std_dev_adjustment)
         
         # Determines direction of adjustment
-        direction = 1 if preferred_gain > gain_settings[i-1] else -1
+        direction = 1 if preferred_gain > gain_values[i-1] else -1
         # Gain adjustment towards prefered gain
-        gain_settings[i] = gain_settings[i-1] + direction * adjustment
+        gain_values[i] = gain_values[i-1] + direction * adjustment
         
         # Limit gain to a safe and practical range
-        gain_settings[i] = np.clip(gain_settings[i], 0, 80)
+        gain_values[i] = np.clip(gain_values[i], 0, 80)
     
-    return gain_settings
+    return gain_values
 
 ########################################################################################################################################################################
 # Monte Carlo simulation for gain adjustments with skewed preferred gain (log-normal distribution)
 ########################################################################################################################################################################
-def monte_carlo_simulation_skewed_preferred_gain(num_simulations, initial_gain, preferred_gain_mean, preferred_gain_std, num_adjustments, mean_adjustment, std_dev_adjustment):
+def monte_carlo_simulation_preferred_gain(num_simulations, initial_gain, preferred_gain_mean, preferred_gain_std, num_adjustments, mean_adjustment, std_dev_adjustment):
     """
     Perform Monte Carlo simulation for user gain adjustments with skewed preferred gain settings (log-normal distribution).
     
@@ -85,7 +85,7 @@ def monte_carlo_simulation_skewed_preferred_gain(num_simulations, initial_gain, 
 ########################################################################################################################################################################
 # Set simulation parameters
 ########################################################################################################################################################################
-initial_gain = 0  # Initial gain setting (0 to 100 scale)
+initial_gain = 0  # Initial gain setting
 preferred_gain_mean = 20  # Mean for skewed distribution (closer to 20 dB, reflecting mild hearing loss)
 preferred_gain_std = 0.3  # Standard deviation for skewed distribution (controls tail length)
 
@@ -97,31 +97,31 @@ num_simulations = 1000  # Number of simulations
 # Run the Monte Carlo simulation with skewed preferred gains
 # simulated_gain_adjustments: A 2D array where each row represents the gain adjustments for one simulation (i.e., one user) across multiple sessions.
 # preferred_gains: A 1D array of preferred gain values for each simulation (user), drawn from a log-normal distribution.
-cumulative_gain_adjustments, preferred_gains = monte_carlo_simulation_skewed_preferred_gain(num_simulations, initial_gain, preferred_gain_mean, preferred_gain_std, num_adjustments, mean_adjustment, std_dev_adjustment)
+gains, preferred_gains = monte_carlo_simulation_preferred_gain(num_simulations, initial_gain, preferred_gain_mean, preferred_gain_std, num_adjustments, mean_adjustment, std_dev_adjustment)
 
 ########################################################################################################################################################################
 # Calculate adjustments, means, delta gains
 ########################################################################################################################################################################
 # Calculate individual gain adjustments (session-by-session differences)
-gain_adjustments = np.diff(cumulative_gain_adjustments, axis=1)
+gain_adjustments = np.diff(gains, axis=1)
 # Add back the initial gain to match the original number of sessions
-initial_gains = cumulative_gain_adjustments[:, 0].reshape(-1, 1)  # Extract the initial gains for each user
+initial_gains = gains[:, 0].reshape(-1, 1)  # Extract the initial gains for each user
 gain_adjustments = np.hstack((initial_gains, gain_adjustments))  # Concatenate the initial gains with the session-by-session adjustments
 
 # Calculate the mean and percentiles for the individual gain adjustments
-adj_gain_mean = np.mean(gain_adjustments, axis=0)
-adj_gain_5 = np.percentile(gain_adjustments, 5, axis=0)
-adj_gain_95 = np.percentile(gain_adjustments, 95, axis=0)
+gain_adj_mean = np.mean(gain_adjustments, axis=0)
+gain_adj_5 = np.percentile(gain_adjustments, 5, axis=0)
+gain_adj_95 = np.percentile(gain_adjustments, 95, axis=0)
 
 # Calculate the mean and percentiles of cumulative gains from the simulations
-cum_adj_gain_mean = np.mean(cumulative_gain_adjustments, axis=0)
-cum_adj_gain_5 = np.percentile(cumulative_gain_adjustments, 5, axis=0)
-cum_adj_gain_95 = np.percentile(cumulative_gain_adjustments, 95, axis=0)
+cum_gain_adj_mean = np.mean(gains, axis=0)
+cum_gain_adj_5 = np.percentile(gains, 5, axis=0)
+cum_gain_adj_95 = np.percentile(gains, 95, axis=0)
 
 # Calculate the delta gain (change from preferred gain)
-delta_gain_mean = np.mean(cumulative_gain_adjustments - preferred_gains[:, None], axis=0)
-delta_gain_5 = np.percentile(cumulative_gain_adjustments - preferred_gains[:, None], 5, axis=0)
-delta_gain_95 = np.percentile(cumulative_gain_adjustments - preferred_gains[:, None], 95, axis=0)
+delta_gain_mean = np.mean(gains - preferred_gains[:, None], axis=0)
+delta_gain_5 = np.percentile(gains - preferred_gains[:, None], 5, axis=0)
+delta_gain_95 = np.percentile(gains - preferred_gains[:, None], 95, axis=0)
 
 ########################################################################################################################################################################
 # Plot histogram of preferred gains
@@ -156,7 +156,7 @@ plt.legend(loc='lower right', fontsize=12, frameon=False, framealpha=0.1)
 plt.grid(True, linestyle='--', alpha=0.3)
 
 # Save and show the figure
-plt.savefig(folder+'mc_convergence_plot.png', dpi=300, bbox_inches='tight')
+plt.savefig(folder+'mc_convergence.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 ########################################################################################################################################################################
@@ -164,9 +164,9 @@ plt.show()
 ########################################################################################################################################################################
 plt.figure(figsize=(10, 6))
 # Plot the mean individual gain adjustment
-plt.plot(adj_gain_mean, label="Mean Adjustment", color="#4169E1", lw=3)
+plt.plot(gain_adj_mean, label="Mean Adjustment", color="#4169E1", lw=3)
 # Fill between the 5th and 95th percentiles for the confidence interval
-plt.fill_between(range(num_adjustments), adj_gain_5, adj_gain_95, color='lightblue', alpha=0.2, label="90% CI")
+plt.fill_between(range(num_adjustments), gain_adj_5, gain_adj_95, color='lightblue', alpha=0.2, label="90% CI")
 # Update title and labels
 plt.title("Session-by-Session Gain Adjustments", fontsize=18, fontweight='bold')
 plt.xlabel("Number of Adjustments", fontsize=18, fontweight='bold')
@@ -178,5 +178,5 @@ plt.legend(loc='lower left', fontsize=12, frameon=False, framealpha=0.1)
 plt.grid(True, linestyle='--', alpha=0.3)
 
 # Save and show the updated figure
-plt.savefig(folder+'mc_adjustments_plot.png', dpi=300, bbox_inches='tight')
+plt.savefig(folder+'mc_adjustments.png', dpi=300, bbox_inches='tight')
 plt.show()
