@@ -8,6 +8,7 @@ Python script for simulating how users adjust hearing aid gain to reach their pr
 - **Adjustable parameters**: The number of adjustments, the mean adjustment size, and variability in both user adjustments and preferred gain settings.
 - **Visualisation**: Plots the mean and confidence intervals for gain adjustments.
 
-<img src="./monte_carlo_preferred_gains_log_normal.png" alt="Simulation Plot" width="400"/>
-
-<img src="./monte_carlo_gain_adjustment_plot_log_normal.png" alt="Simulation Plot" width="600"/>
+<div style="display: flex; justify-content: space-between;">
+  <img src="./monte_carlo_preferred_gains_log_normal.png" alt="Simulation Plot" width="400"/>
+  <img src="./monte_carlo_gain_adjustment_plot_log_normal.png" alt="Simulation Plot" width="600"/>
+</div>
