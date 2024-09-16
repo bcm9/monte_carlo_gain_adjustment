@@ -91,7 +91,7 @@ preferred_gain_std = 0.4  # Standard deviation for skewed distribution (controls
 num_adjustments = 15  # Number of self-adjustments (e.g., over sessions)
 mean_adjustment = 4  # Mean gain adjustment per session
 std_dev_adjustment = 1  # Variability in adjustment
-num_simulations = 1000  # Number of Monte Carlo simulations
+num_simulations = 1000  # Number of simulations
 
 # Run the Monte Carlo simulation with skewed preferred gains
 simulated_gain_adjustments, preferred_gains = monte_carlo_simulation_skewed_preferred_gain(num_simulations, initial_gain, preferred_gain_mean, preferred_gain_std, num_adjustments, mean_adjustment, std_dev_adjustment)
