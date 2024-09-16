@@ -89,7 +89,7 @@ initial_gain = 0  # Initial gain setting
 preferred_gain_mean = 20  # Mean for skewed distribution (closer to 20 dB, reflecting mild hearing loss)
 preferred_gain_std = 0.3  # Standard deviation for skewed distribution (controls tail length)
 
-num_adjustments = 15  # Number of self-adjustments (e.g., over sessions)
+num_adjustments = 12  # Number of self-adjustments (e.g., over trials/sessions)
 mean_adjustment = 4  # Mean gain adjustment per session
 std_dev_adjustment = 1  # Variability in adjustment
 num_simulations = 1000  # Number of simulations
@@ -168,7 +168,7 @@ plt.plot(gain_adj_mean, label="Mean Adjustment", color="#4169E1", lw=3)
 # Fill between the 5th and 95th percentiles for the confidence interval
 plt.fill_between(range(num_adjustments), gain_adj_5, gain_adj_95, color='lightblue', alpha=0.2, label="90% CI")
 # Update title and labels
-plt.title("Session-by-Session Gain Adjustments", fontsize=18, fontweight='bold')
+plt.title("Trial-by-Trial Gain Adjustments", fontsize=18, fontweight='bold')
 plt.xlabel("Number of Adjustments", fontsize=18, fontweight='bold')
 plt.ylabel("Gain Adjustment (dB)", fontsize=18, fontweight='bold')
 # Style the ticks and legend
