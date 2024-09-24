@@ -143,6 +143,13 @@ plt.ylabel("Frequency", fontsize=16, fontweight='bold')
 plt.xticks(fontsize=14)
 plt.yticks(fontsize=14)
 plt.grid(True, linestyle='--', alpha=0.3)
+# Remove axes borders
+plt.gca().spines['top'].set_visible(False)
+plt.gca().spines['right'].set_visible(False)
+plt.gca().spines['left'].set_visible(False)
+plt.gca().spines['bottom'].set_visible(False)
+# Remove x and y tick lines
+plt.tick_params(axis='both', which='both', length=0)
 
 # Save and show the histogram
 folder = 'C:/Users/bc22/OneDrive/Documents/code/gain_adjustment_monte-carlo/'
@@ -162,6 +169,13 @@ plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(loc='lower right', fontsize=12, frameon=False, framealpha=0.1)
 plt.grid(True, linestyle='--', alpha=0.3)
+# Remove axes borders
+plt.gca().spines['top'].set_visible(False)
+plt.gca().spines['right'].set_visible(False)
+plt.gca().spines['left'].set_visible(False)
+plt.gca().spines['bottom'].set_visible(False)
+# Remove x and y tick lines
+plt.tick_params(axis='both', which='both', length=0)
 
 # Save and show the figure
 plt.savefig(folder+'mc_convergence.png', dpi=300, bbox_inches='tight')
@@ -184,6 +198,13 @@ plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.legend(loc='lower left', fontsize=12, frameon=False, framealpha=0.1)
 plt.grid(True, linestyle='--', alpha=0.3)
+# Remove axes borders
+plt.gca().spines['top'].set_visible(False)
+plt.gca().spines['right'].set_visible(False)
+plt.gca().spines['left'].set_visible(False)
+plt.gca().spines['bottom'].set_visible(False)
+# Remove x and y tick lines
+plt.tick_params(axis='both', which='both', length=0)
 
 # Save and show the updated figure
 plt.savefig(folder+'mc_adjustments.png', dpi=300, bbox_inches='tight')
